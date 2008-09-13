@@ -25,27 +25,24 @@ public class Point {
 	
 	public float x,y,z;
 	
-	public Point(){
-		x=0;
-		y=0;
-		z=0;
-	}
 	public Point(float _x, float _y, float _z){
 		x=_x;
 		y=_y;
 		z=_z;
 	}
 	
+	public Point(){
+		this(0,0,0);
+	}
+	
 	public Point(float _x, float _y){
-	    x=_x;
-	    y=_y;
-	    z=0;
+	    this(_x,_y,0);
 	}
+	/*
 	public Point(double x, double y){
-		this.x = (float)x;
-		this.y = (float)y;
+		this((float)x,(float)y);
 	}
-
+	*/
 	/*
 	public void setProperty(String prop, Object val){
 		Float f = (Float)val;
@@ -235,6 +232,22 @@ public class Point {
 	  if(y < rect.top() ) 	{ y = rect.bottom();}
 	}
 	/**
+	 * Gets the bezier curve point provided the 3 anchor points and a value between 0 and 1;
+	 * @param a the first point
+	 * @param b the second point
+	 * @param c the third point
+	 * @param t a value between 0 and 1
+	 * */
+	public static Point getDiscreteBezierPosition(Point a,Point b, Point c, float t){
+		float mt	 = 1-t;
+		float tt	 = t*t;
+		float pt	 = mt*mt;
+		float at	 = mt*t;
+		float x		 = a.x*pt+2*b.x*at+c.x*tt;
+		float y		 = a.y*pt+2*b.y*at+c.y*tt;
+		return new Point(x,y);
+	}
+	/**
 	 * Gets the linear point inbetween the provided 2 points and a value between 0 and 1;
 	 * @param a the first point
 	 * @param b the second point
@@ -305,6 +318,17 @@ public class Point {
 		float y = (float)(q*Math.sin(r));
 		this.x = x;
 		this.y = y;
+	}
+	
+	public static Point getMidPoint(Point a, Point b){
+		Point c = new Point();
+		c.calcMidPoint(a,b);
+		return c;
+	}
+	
+	public void calcMidPoint(Point a, Point b){
+		x = (float)((a.x+b.x)*.5);
+		y = (float)((a.y+b.y)*.5);
 	}
 	
 	public String toString(){
