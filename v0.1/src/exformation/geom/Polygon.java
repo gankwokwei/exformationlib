@@ -17,6 +17,19 @@ public class Polygon {
 					addPoint(p);
 				}
 			}
+
+			public Polygon(Vector<Point> list, boolean isClosed){
+				this.isClosed = isClosed;
+				int len = list.size();
+				for(int n=0; n<len;n++){
+					Point p = list.get(n);
+					addPoint(p);
+				}
+			}
+			
+			public Polygon(boolean isClosed){
+				this.isClosed = isClosed;
+			}
 			
 			public void addPoint(Point p){
 				points.add(p);
@@ -37,7 +50,7 @@ public class Polygon {
 			}
 		
 			public Polygon fromRect(Rectangle rect){
-				Polygon poly = new Polygon(null,true);
+				Polygon poly = new Polygon(true);
 				poly.addPoint(new Point(rect.x,				rect.y));
 				poly.addPoint(new Point(rect.right(),		rect.y));
 				poly.addPoint(new Point(rect.right(),		rect.bottom()));

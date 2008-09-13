@@ -5,7 +5,7 @@ public class MathUtil {
 	public static double C_PI_180 = Math.PI/180;
 	public static double C_180_PI = 180/Math.PI;
 	
-	static float constrainValue (float n, float mn, float mx) {
+	static public float constrainValue (float n, float mn, float mx) {
 		return Math.max( Math.min(n, mx), mn);
 	}
 	
@@ -14,5 +14,11 @@ public class MathUtil {
 	}
 	static public float radiansToDegrees(float theta) {
 		return (float) (theta * C_180_PI);
+	}
+	static public float random(float range){
+		return (float)(Math.random()*range);
+	}
+	static public int random(int range){
+		return (int)(Math.random()*range);
 	}
 }

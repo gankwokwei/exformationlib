@@ -40,4 +40,8 @@ public class Rectangle extends java.awt.Rectangle{
 	public boolean contains(Point p){
 		return contains(new java.awt.Point((int)p.x,(int)p.y));
 	}
+	public void setSize(int w, int h){
+		width = w;
+		height = h;
+	}
 }
