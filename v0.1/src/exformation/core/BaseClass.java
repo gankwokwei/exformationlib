@@ -2,11 +2,11 @@ package exformation.core;
 
 public class BaseClass {
 
-		public void debug(String message){
-			System.out.println(message);
+		public void debug(Object message){
+			System.out.println(this+" "+message);
 		}
 		
 		public String toString(){
-			return this.getClass().getPackage().toString()+":"+getClass().getName();
+			return "["+getClass().getName()+"]";
 		}
 }

@@ -1,7 +1,9 @@
 package exformation.display;
 
-//import java.io.Serializable;
 import java.util.Vector;
+
+import exformation.geom.Dimension;
+import exformation.utils.MathUtil;
 
 
 public class Sprite extends DisplayObject{// implements Serializable{
@@ -33,6 +35,19 @@ public class Sprite extends DisplayObject{// implements Serializable{
 		return children.size();
 	}
 	
+	public Dimension dimension(){
+		Dimension result = new Dimension();
+		int len = numChildren();
+		for(int n=0;n<len;n++){
+			DisplayObject child = children.get(n);
+			Dimension dim = child.dimension();
+			dim.w+=child.position.x;
+			dim.h+=child.position.y;
+			result.max(dim);
+		}
+		return result;
+	}
+	
 	public void render(){
 		//if(dirty){
 			//if(visible){
@@ -40,16 +55,23 @@ public class Sprite extends DisplayObject{// implements Serializable{
 			//}
 			//dirty = false;
 		//}
+		calc();
+		g.pushMatrix();
+		g.translate(position.x, position.y);
+		g.rotate((float)(MathUtil.C_PI_180*rotation.z));
+		//g.rotateZ((float)(MathUtil.C_PI_180*rotation.z));
+		//g.rotateX((float)(MathUtil.C_PI_180*rotation.x));
+		//g.rotateY((float)(MathUtil.C_PI_180*rotation.y));
 		if(visible){
-			g.pushMatrix();
-			g.translate(position.x, position.y);
 			draw();
 			int len = numChildren();
 			for(int n=0;n<len;n++){
 				children.get(n).render();
 			}
-			g.popMatrix();
 		}
+
+		g.popMatrix();
 	}
+	
 
 }

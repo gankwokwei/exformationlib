@@ -8,6 +8,8 @@ package exformation.geom;
 
 import java.util.Vector;
 
+import processing.core.PGraphics;
+
 import exformation.utils.MathUtil;
 
 
@@ -59,7 +61,10 @@ public class Point {
 		}
 	}
 	*/
-
+	public void random(Rectangle rect){
+		x = MathUtil.random(rect.width)+rect.x;
+		y = MathUtil.random(rect.height)+rect.y;
+	}
 	/**
 	 * Get the center of the circle passing through the points a, b, and c. 
 	 * */
@@ -332,6 +337,18 @@ public class Point {
 	}
 	
 	public String toString(){
-		return "[exformation.geom.Point] x="+x+" y="+y;
+		return "["+getClass()+"] x="+x+" y="+y;
+	}
+	
+	public void draw(PGraphics g){
+		g.fill(0);
+		g.rect(x-1, y-1, 3, 3);
+		g.noFill();
+	}
+	public void ease(Point p,float n){
+		float dx = p.x-x;
+		float dy = p.y-y;
+		x+=dx*n;
+		y+=dy*n;
 	}
 }

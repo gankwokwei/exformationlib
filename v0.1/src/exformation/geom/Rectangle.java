@@ -2,23 +2,24 @@ package exformation.geom;
 
 
 public class Rectangle extends java.awt.Rectangle{
-	
-	private static final long serialVersionUID = 4116209729176250856L;
 
 	public Rectangle(){
-		width = 0;
-		height = 0;
+		this(0,0);
+	}
+	public Rectangle(float x, float y, float w, float h){
+		this((int)x,(int)y,(int)w,(int)h);
 	}
 	public Rectangle(int x, int y, int w,int h){
+		this(w,h);
 		this.x = x;
 		this.y = y;
-		width = w;
-		height = h;
 	}
+	
 	public Rectangle(int w,int h){
 		width = w;
 		height = h;
 	}
+	
 	public void right(int val){
 		width = val-x;
 	}
@@ -43,5 +44,8 @@ public class Rectangle extends java.awt.Rectangle{
 	public void setSize(int w, int h){
 		width = w;
 		height = h;
+	}
+	public Point center(){
+		return new Point((width/2)+x,(height/2)+x);
 	}
 }
