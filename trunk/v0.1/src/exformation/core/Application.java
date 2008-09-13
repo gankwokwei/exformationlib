@@ -1,53 +1,71 @@
 package exformation.core;
 
+import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 //import java.awt.event.KeyListener;
 
 import exformation.display.DisplayObject;
 import exformation.display.KeyboardShortcuts;
 import exformation.display.Sprite;
+import exformation.geom.Point;
 import exformation.geom.Rectangle;
 import exformation.utils.Delegate;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PGraphics;
-public class Application extends PApplet {
+public class Application extends PApplet implements ComponentListener{
 	
 	static final long serialVersionUID = 1L;
  
 	public static PGraphics PGRAPHICS;
+	public static PFont DEFAULT_FONT;
+	
+	public int backgroundColor = color(255,255,255);
 	
     public Rectangle stage = new Rectangle(width,height);
     public KeyboardShortcuts shortcuts;
     public Sprite root;
+    public Point mousePosition = new Point();
+    public boolean isInit;
     
 	public void setup(){
-		size(width,height,P3D);
-		PGRAPHICS = g;
+		size(width,height);
+		PGRAPHICS 		= g;
+		DEFAULT_FONT 	= loadFont("../data/CourierNew-12.vlw"); 
+		background(backgroundColor);
 		root = new Sprite();
 		shortcuts = new KeyboardShortcuts(this);
-		shortcuts.position.setValue(100,100);
-		addChild(shortcuts);
-		//addComponentListener(this);
-		print(width);
+		registerPre(this);
+		registerSize(this);
+		addComponentListener(this);
+		isInit = true;
+		refresh();
 		main();
-		//registerDraw(this);
-		//addKeyListener(this);
-	}
-
-	public void draw(){
-		//root.debug("render");
-		root.render();
 	}
 	
-	public void debug(String message){
-		root.debug(message);
+	public void pre(){
+		mousePosition.setValue(mouseX, mouseY);
+		calc();
 	}
+	
+	public void draw(){
+		render();
+	}
+	
+	public void render(){
+		background(backgroundColor);
+		root.render();
+		shortcuts.render();
+	}
+	
+	public void debug(Object message){
+		root.debug(message==null?"null":message.toString());
+	}
+	
 	public void addShortCut(char key,String message, Delegate handler){
 		shortcuts.addShortCut(key, message, handler);
-	}
-
-	public void addShortCut(char key,String message, String method){
-		shortcuts.addShortCut(key, message, new Delegate(this,"method"));
+		refresh();
 	}
 	
 	public DisplayObject addChild(DisplayObject child){
@@ -58,18 +76,33 @@ public class Application extends PApplet {
 		return root.removeChild(child);
 	}
 	
+	public void resize(Dimension d){
+		resize(d.width,d.height);
+	}
+	
+	private void refresh(){
+		if(isInit){
+			shortcuts.centerOn(stage);
+		}
+	}
+	
 	public void resize(int w, int h){ 
-		stage.width = w;
-		stage.height = h;
-		println("onREsize");
+		stage.setSize(w,h);
+		refresh();
 		super.resize(w,h);
-		onResize();
-
+		if(isInit){
+			onResize();
+		}
 	}
 
-	public void main(){}
+	public void main(){};
+	public void calc(){};
 	public void onResize(){};
 	public void componentHidden(ComponentEvent evt) {}
 	public void componentShown(ComponentEvent evt) {}
 	public void componentMoved(ComponentEvent evt) {}
+
+	public void componentResized(ComponentEvent e) {
+		resize(e.getComponent().getSize());
+	}
 }

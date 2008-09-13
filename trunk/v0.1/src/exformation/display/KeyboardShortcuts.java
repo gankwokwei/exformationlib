@@ -8,7 +8,7 @@ import exformation.geom.Rectangle;
 import exformation.utils.Delegate;
 
 public class KeyboardShortcuts extends Sprite{
-
+	
 	private Hashtable<Character, ShortCutItem> list = new Hashtable<Character, ShortCutItem>();
 	private Rectangle background;
 	private ShortCutItem first;
@@ -16,15 +16,13 @@ public class KeyboardShortcuts extends Sprite{
 	
 	public KeyboardShortcuts(Application parent){
 		visible(false);
+		position.setValue(100, 100);
+		//rotation.z = 45;
 		background = new Rectangle(0,0,300,200);
 		first = addShortCut('?', "Display this panel", Delegate.create(this,"display"));
 		parent.registerKeyEvent(this);
 	}
-	
-	public void pre(){
-		render();
-	}
-	
+
 	public void keyEvent(KeyEvent evt){
 		switch (evt.getID()) {
 		    case KeyEvent.KEY_PRESSED:
@@ -39,29 +37,21 @@ public class KeyboardShortcuts extends Sprite{
 		}
 	}
 	
-	
-	public void display(){
-		visible(true);
-	}
-	
-	public void hide(){
-		visible(false);
-	}
-	
 	public void draw(){
+		//rotation.z+=1;
+		//rotation.z%=360;
 		g.fill(0);
 		g.rect(background.x,background.y,background.width,background.height);
 		g.noFill();
 	}
 	
 	public ShortCutItem addShortCut(char key,String message, Delegate handler){
-	    //if(key=='space')key = ' ';  
-		//var w:int = 300;
+
 		int h = 20;
 		ShortCutItem item = new ShortCutItem(key,message,handler);
+		addChild(item);
 		maxWidth = Math.max(maxWidth,item.width()+20);
 		item.position.y = (list.size()-1)*h;
-		addChild(item);
 		if(first!=null) first.setY(list.size()*h);
 		list.put(key, item);
 		background.setSize(maxWidth,(list.size()*h)+5);
@@ -69,7 +59,7 @@ public class KeyboardShortcuts extends Sprite{
 	}
 	
 	private class ShortCutItem extends DisplayObject{
-		
+
 		char key;
 		String message;
 		Delegate handler;
@@ -78,10 +68,7 @@ public class KeyboardShortcuts extends Sprite{
 			this.key = key;
 			this.message = message;
 			this.handler = handler;
-		}
-		
-		public int width(){
-			return 200;
+			setSize(200,20);
 		}
 		
 		public void execute(){
@@ -89,8 +76,9 @@ public class KeyboardShortcuts extends Sprite{
 		}
 		
 		public void draw(){
-			g.fill(255,0,0);
-			g.rect(0,0,200,20);
+			g.textFont(Application.DEFAULT_FONT);
+			g.fill(255);
+			g.text(key+": "+message,5,18);
 			g.noFill();
 		}
 	}

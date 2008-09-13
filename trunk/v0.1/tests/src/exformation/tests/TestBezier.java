@@ -2,8 +2,8 @@ package exformation.tests;
 
 import megamu.shapetween.Tween;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import exformation.core.Application;
+import exformation.display.DisplayObject;
 import exformation.geom.Dimension;
 import exformation.geom.Point;
 import exformation.geom.Polygon;
@@ -21,10 +21,12 @@ public class TestBezier extends Application {
 	
 	private Polygon [] polys 	= new Polygon[NUM_POLYS];
 	private Pulse [] pulses		= new Pulse[NUM_POLYS*NUM_PULSES_PER_POLY];
-	private boolean useBeziers = true;
+	private boolean useBeziers  = true;
+	
 	//private PGraphics pg;
 	
 	public void main(){
+		
 		//pg = createGraphics(width, height, P3D);
 		int len = polys.length;
 		int w = stage.width;
@@ -45,24 +47,27 @@ public class TestBezier extends Application {
 			//now create some pulses giving each of them a reference to the bezier to follow
 			for (int i=0;i<NUM_PULSES_PER_POLY;i++){
 				m+=0.005;
-				Pulse pulse =  new Pulse(bezier,0.01);
+				Pulse pulse =  new Pulse(bezier,0.005);
 				pulse.cursor=m;
 				pulses[index] = pulse;
+				addChild(pulse);
 				index++;
 			}
 		}
-		addShortCut('1', "Render with Beziers",new Delegate(this,"toggleBezier"));
-		addShortCut('2', "Render with Polygons",new Delegate(this,"togglePolygon"));
+		addShortCut('1', "Render with Beziers",Delegate.create(this,"toggleBezier"));
+		addShortCut('2', "Render with Polygons",Delegate.create(this,"togglePolygon"));
 	}
 	
 	public void toggleBezier(){
 		useBeziers = true;
 		toggleDrawing();
 	}
+	
 	public void togglePolygon(){
 		useBeziers = false;
 		toggleDrawing();
 	}
+	
 	public void toggleDrawing(){
 		int len = polys.length;
 		int index = 0;
@@ -83,10 +88,8 @@ public class TestBezier extends Application {
 	}
 	
 	public void draw(){
-		//pg.beginDraw();
-		//pg.background(255,10);
-		background(255,10);
-		stroke(0);
+		render();
+		g.stroke(0);
 		g.noFill();
 		for (int n=0; n<polys.length; n++){
 			Polygon poly = polys[n];
@@ -96,17 +99,18 @@ public class TestBezier extends Application {
 				p.update();
 			}
 		}
-		g.fill(0);
-		for (int i=0;i<pulses.length;i++){
-			Pulse pulse = pulses[i];
-			pulse.update(g);
-		}
-		root.render();
-		//pg.endDraw();
-		//image(pg,0,0);
+		mousePosition.draw(g);
 	}
 	
 	public void mousePressed(){
+		refresh();
+	}
+	
+	public void onResize(){
+		refresh();
+	}
+	
+	public void refresh(){
 		for (Polygon poly:polys){
 			randomize(poly);
 		}
@@ -141,14 +145,14 @@ public class TestBezier extends Application {
 		Tween tweenY;
 		Point start;
 		Point target;
-		
+		int time = MathUtil.random(20)+10;
 		public TweenablePoint(PApplet p,float x, float y){
 			this.x = x;
 			this.y = y;
 			start  = new Point();
 			target = new Point();
-			tweenX = new Tween(p,10, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
-			tweenY = new Tween(p,10, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
+			tweenX = new Tween(p,time, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
+			tweenY = new Tween(p,time, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
 		}
 		
 		public void move(Point p){
@@ -163,29 +167,27 @@ public class TestBezier extends Application {
 			y = lerp( start.y, target.y, tweenY.position() );
 		}
 	}
-	
-	class Pulse{
+
+	class Pulse extends DisplayObject{
 		public double cursor = 0;
 		public double speed = 0.001;
 		public Polygon poly;
-		public Point position;
+		//public Point position;
 		
 		public Pulse(Polygon p,double speed){
-			this.poly = p;
+			this.poly  = p;
 			this.speed = speed;
-			position = new Point();
+			//position = new Point();
 		}
-		public void update(PGraphics g){
+		public void draw(){
 			cursor+=speed;
 			cursor%=1;
 			Point p = poly.getPointByTime((float)cursor);
-			
-			g.pushMatrix();
-			g.translate(p.x, p.y);
-			g.rotate((float) (Math.PI/180*position.angleTo(p)));
+			rotation.z = position.angleTo(p);
+			position.copy(p);
 			g.fill(0);
 			g.rect(-1,-1,6,3);
-			g.popMatrix();
+			g.noFill();
 			position.copy(p);
 		}
 	}
