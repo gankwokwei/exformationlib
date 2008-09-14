@@ -34,6 +34,7 @@ public class Application extends PApplet implements ComponentListener{
 	public void setup(){
 		Stage = stage;
 		size(width,height);
+		//frameRate(4);
 		PGRAPHICS 		= g;
 		DEFAULT_FONT 	= loadFont("../data/CourierNew-12.vlw"); 
 		background(backgroundColor);

@@ -21,4 +21,7 @@ public class MathUtil {
 	static public int random(int range){
 		return (int)(Math.random()*range);
 	}
+	static public float lerp(float start, float stop, float amt){
+	 	return start + (stop-start) * amt;
+	}
 }

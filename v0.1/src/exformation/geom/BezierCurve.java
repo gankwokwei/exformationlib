@@ -36,30 +36,40 @@ public class BezierCurve extends Polygon{
 			Point b = getPointAt(index+1);
 			Point c = Point.getMidPoint(a,b);
 			Point d	= c.clone();
+
 			if(!isClosed && renderTips){
 				//g.moveTo(a.x,a.y);
 				//g.lineTo(c.x,c.y);
 				g.line(a.x, a.y, c.x, c.y);
 			}else{
 				//g.moveTo(c.x, c.y);
+				
 			}
-			
+			g.beginShape();
+			//g.fill(200,20);
+			g.vertex(c.x, c.y);
+			//Point b2 = new Point();
 			for (int n = isClosed ? 1 : 2; n<len; n++) {
 				a = getPointAt(n);
-				//c.draw(g,0xFFFF00);
 				c.calcMidPoint(a,b);
-				//g.curveTo(b.x, b.y, c.x, c.y);
-				g.bezier( c.x, c.y, b.x, b.y, b.x, b.y ,d.x, d.y);
+				//theres something wrong here...
+				float amt = 0.3f;
+				Point b1 = Point.lerp(b,c,amt);
+				Point b2 = Point.lerp(b,d,amt);
+				Point b3 = Point.getMidPoint(b1, b2);
+				// if this is B it almost works
+				//g.bezierVertex( b.x, b.y, b.x, b.y ,c.x, c.y);
+				g.bezierVertex( b3.x, b3.y, b3.x, b3.y ,c.x, c.y);
 				//g.curve( c.x, c.y, d.x, d.y, a.x, a.y, b.x, b.y);
-				g.rect(c.x-1,c.y-1, 3,3);
-				g.rect(a.x-1,a.y-1, 3,3);
 				b = a;
 				d = c.clone();
 			}
+			//debug(b2);
 			if(!isClosed && renderTips){
 				//g.lineTo(b.x,b.y);
 				g.line(c.x, c.y, b.x, b.y);
 			}
+			g.endShape();
 		}
 	}
 	/**
