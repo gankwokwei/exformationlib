@@ -20,13 +20,13 @@ public class Delegate {
 		this(obj,method,null);
 	}
 	
-	public static Delegate create(Object obj, String method){
+	public static Delegate create(Object obj, String method, Object ... rest){
 		return new Delegate(obj,method);
 	}
 	
 	public void execute(){
 	 try {
-		    Class  c  = obj.getClass();
+		    Class<?>  c  = obj.getClass();
 	        Method m  = c.getMethod(method);
 	        m.invoke(obj,args);
 	    } catch (Throwable any){
