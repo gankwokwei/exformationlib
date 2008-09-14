@@ -15,7 +15,7 @@ public class TestBezier extends Application {
 
 	private static final long serialVersionUID = 1L;
 
-	private int NUM_POLYS			= 1;
+	private int NUM_POLYS			= 10;
 	private int NUM_POINTS_PER_POLY = 20;
 	private int NUM_PULSES_PER_POLY	= 10;
 	
@@ -88,20 +88,22 @@ public class TestBezier extends Application {
 	}
 	
 	public void draw(){
-		render();
-		g.stroke(0);
+		g.background(255);
+		g.stroke(100);
 		//g.fill(100);
 		//g.beginShape();
 		for (int n=0; n<polys.length; n++){
 			Polygon poly = polys[n];
-			poly.render(g);
 			for(int j=0;j<poly.length();j++){
 				TweenablePoint p = (TweenablePoint)poly.getPointAt(j);
 				p.update();
 			}
+			poly.render(g);
 		}
+		root.render();
+		shortcuts.render();
 		//g.endShape();
-		mousePosition.draw(g);
+		//mousePosition.draw(g);
 	}
 	
 	public void mousePressed(){
@@ -143,8 +145,7 @@ public class TestBezier extends Application {
 	
 	class TweenablePoint extends Point{
 		
-		Tween tweenX;
-		Tween tweenY;
+		Tween tween;
 		Point start;
 		Point target;
 		int time = MathUtil.random(20)+10;
@@ -153,20 +154,17 @@ public class TestBezier extends Application {
 			this.y = y;
 			start  = new Point();
 			target = new Point();
-			tweenX = new Tween(p,time, Tween.FRAMES, Tween.BEZIER, Tween.ONCE);
-			tweenY = new Tween(p,time, Tween.FRAMES, Tween.BEZIER, Tween.ONCE);
+			tween = new Tween(p,time, Tween.FRAMES, Tween.BEZIER, Tween.ONCE);
 		}
 		
 		public void move(Point p){
 			target.copy(p);
 			start.copy(this);
-			tweenX.start();
-			tweenY.start();
+			tween.start();
 		}
 		
 		public void update(){
-			x = lerp( start.x, target.x, tweenX.position() );
-			y = lerp( start.y, target.y, tweenY.position() );
+			copy(Point.lerp(start, target, tween.position()));
 		}
 	}
 
@@ -188,6 +186,7 @@ public class TestBezier extends Application {
 			rotation.z = position.angleTo(p);
 			position.copy(p);
 			g.fill(0);
+			g.noStroke();
 			g.rect(-1,-1,6,3);
 			g.noFill();
 			position.copy(p);

@@ -2,9 +2,11 @@ package exformation.geom;
 
 import java.util.Vector;
 
+import exformation.core.BaseClass;
+
 import processing.core.PGraphics;
 
-public class Polygon {
+public class Polygon extends BaseClass{
 		
 			public Vector<Point> points = new Vector<Point>();
 			public boolean isClosed;
@@ -88,22 +90,17 @@ public class Polygon {
 					Point p;
 					int n;
 					p = getPointAt(0);
-					float x = p.x;
-					float y = p.y;
-					// dg.moveTo(p.x,p.y);
+					g.beginShape();
+					g.vertex(p.x,p.y);
 					for (n=1;n<len;n++){
-						//Console.log(len);
 						p = getPointAt(n);
-						g.line(x,y,p.x,p.y);
-						x = p.x;
-						y = p.y;
+						g.vertex(p.x, p.y);
 					}
 					if(isClosed){
-						x = p.x;
-						y = p.y;
 						p = getPointAt(0);
-						g.line(x,y,p.x,p.y);
+						g.vertex(p.x, p.y);
 					}
+					g.endShape();
 				}
 			}
 			

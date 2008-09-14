@@ -6,7 +6,6 @@
  */
 package exformation.geom;
 
-import java.util.Vector;
 
 import processing.core.PGraphics;
 
@@ -190,11 +189,11 @@ public class Point {
 	/**
 	 * finds the average position in an array of points in space
 	 * */
-	public static Point getAveragePosition(Vector<Point>arr){
-		Point total = new Point(0,0);
-		int len = arr.size();
+	public static Point getAveragePosition(Point[]arr){
+		Point total = new Point(0.0f,0.0f);
+		int len = arr.length;
 		for (int n=0;n<len;n++){
-			Point p = arr.get(n);
+			Point p = arr[n];
 			total.sum(p);
 		}
 		total.div(new Point(len,len));
@@ -351,4 +350,16 @@ public class Point {
 		x+=dx*n;
 		y+=dy*n;
 	}
+	public static Point lerp(Point a, Point b, float amt){
+		Point p = new Point();
+		p.x = MathUtil.lerp(a.x, b.x, amt);
+		p.y = MathUtil.lerp(a.y, b.y, amt);
+		return p;
+	}
+	/*
+	public void lerp(Point p, float amt){
+		x = MathUtil.lerp(x, p.x, amt);
+		y = MathUtil.lerp(y, p.y, amt);
+	}
+	*/
 }
