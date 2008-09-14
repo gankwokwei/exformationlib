@@ -15,7 +15,7 @@ public class TestBezier extends Application {
 
 	private static final long serialVersionUID = 1L;
 
-	private int NUM_POLYS			= 10;
+	private int NUM_POLYS			= 1;
 	private int NUM_POINTS_PER_POLY = 20;
 	private int NUM_PULSES_PER_POLY	= 10;
 	
@@ -90,7 +90,8 @@ public class TestBezier extends Application {
 	public void draw(){
 		render();
 		g.stroke(0);
-		g.noFill();
+		//g.fill(100);
+		//g.beginShape();
 		for (int n=0; n<polys.length; n++){
 			Polygon poly = polys[n];
 			poly.render(g);
@@ -99,6 +100,7 @@ public class TestBezier extends Application {
 				p.update();
 			}
 		}
+		//g.endShape();
 		mousePosition.draw(g);
 	}
 	
@@ -151,8 +153,8 @@ public class TestBezier extends Application {
 			this.y = y;
 			start  = new Point();
 			target = new Point();
-			tweenX = new Tween(p,time, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
-			tweenY = new Tween(p,time, Tween.FRAMES, Tween.COSINE, Tween.ONCE);
+			tweenX = new Tween(p,time, Tween.FRAMES, Tween.BEZIER, Tween.ONCE);
+			tweenY = new Tween(p,time, Tween.FRAMES, Tween.BEZIER, Tween.ONCE);
 		}
 		
 		public void move(Point p){

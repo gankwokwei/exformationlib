@@ -2,63 +2,85 @@ package exformation.tests;
 
 import processing.core.PGraphics;
 import exformation.core.Application;
+import exformation.display.DisplayObject;
 import exformation.geom.Point;
-import exformation.geom.Rectangle;
+import exformation.utils.Delegate;
+import exformation.utils.MathUtil;
 
 public class TestPoint extends Application {
 
-	private static final long serialVersionUID = 1L;
-
-	private int len = 10000;
+	private int len = 100;
 	private Star[] list = new Star[len];
-
-	public int width = 800;
-	public int height = 600;
 	PGraphics pg;
-
+	
+	public static int mode = 0;
+	
 	public void main(){
-		pg = createGraphics(width, height, P3D);
-		print("start");
-		//size(width,height,P3D);
-		//stage = new Rectangle(width,height);
+		pg = createGraphics(stage.width, stage.height, P3D);
+		Application.PGRAPHICS = pg;
+		clearBackgrondOnRender = false;
 		for (int n=0;n<len;n++){
 			Star p = new Star();
-			p.position.x = random(width);
-			p.position.y = random(height);
+			p.position.random(stage);
+			addChild(p);
 			list[n]= p;
 		}
-		background(255);
+		addShortCut('1', "toggle wrap / bounce / constrain", Delegate.create(this, "toggleMode"));
+	}
+	
+	public void toggleMode(){
+		TestPoint.mode ++;
+		TestPoint.mode %=3;
 	}
 	
 	public void draw(){
 		pg.beginDraw();
 		pg.background(255,10);
-		color(0);
-		for (int n=0;n<len;n++){
-			Star p = list[n];
-			p.move(stage);
-			p.render(pg);
-		}
+		pg.color(255,0,0);
+		render();
 		pg.endDraw();
 		image(pg,0,0);
+		shortcuts.render();
+	}
+	
+	public void mousePressed(){
+		for (Star s:list){
+			s.randomizeDirection();
+		}
+	}
+	
+	private class Star extends DisplayObject{
+		
+		Point direction 	= new Point();
+		Point lastPosition 	= new Point();
+		
+		float speed 	= MathUtil.random(3.0f)+1.0f;
+		int color		= 0;
+		public Star(){
+			randomizeDirection();
+		};
+		
+		public void randomizeDirection(){
+			direction.x = MathUtil.random(4.0f)-2.0f;
+			direction.y = MathUtil.random(4.0f)-2.0f;
+		}
+		
+		public void calc(){
+			position.sum(direction.x*speed,direction.y*speed);
+			switch(mode){
+				case 0: position.bounce(stage,direction);break;
+				case 1: position.wrap(stage);break;
+				case 2: position.constrain(stage);break;
+			}
+			rotation.z = position.angleTo(lastPosition);
+			lastPosition.copy(position);
+		};
+		
+		public void draw(){
+			g.fill(color);
+			g.rect(-1,-1,6,3);
+		}
 	}
 }
 
-class Star{
-	
-	Point direction = new Point(1,1);
-	Point position	= new Point();
-	
-	double speed 	= (Math.random()*10);
-	
-	public Star(){};
-	public void move(Rectangle rect){
-		//direction.x=Math.random()
-		position.sum(direction.x+speed,direction.y+speed);
-		//position.sum(direction);
-		position.bounce(rect,direction);
-	}
-	public void render(PGraphics g){
-		g.point(position.x,position.y);
-	}
-}
+

@@ -24,12 +24,15 @@ public class Application extends PApplet implements ComponentListener{
 	public int backgroundColor = color(255,255,255);
 	
     public Rectangle stage = new Rectangle(width,height);
+    public static Rectangle Stage;
     public KeyboardShortcuts shortcuts;
     public Sprite root;
     public Point mousePosition = new Point();
     public boolean isInit;
+    public boolean clearBackgrondOnRender=true;
     
 	public void setup(){
+		Stage = stage;
 		size(width,height);
 		PGRAPHICS 		= g;
 		DEFAULT_FONT 	= loadFont("../data/CourierNew-12.vlw"); 
@@ -54,7 +57,9 @@ public class Application extends PApplet implements ComponentListener{
 	}
 	
 	public void render(){
-		background(backgroundColor);
+		if(clearBackgrondOnRender){
+			background(backgroundColor);
+		}
 		root.render();
 		shortcuts.render();
 	}

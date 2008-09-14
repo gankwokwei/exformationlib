@@ -7,6 +7,9 @@ import exformation.utils.MathUtil;
 
 public class TestDisplayList extends Application{
 
+	/**
+	 * Called by Application after init.
+	 */
 	public void main(){
 		smooth();
 		int len=5;
@@ -17,20 +20,12 @@ public class TestDisplayList extends Application{
 			addChild(chain);
 		}
 	}
-
-	private class Box extends Sprite{
-		
-		public int color = MathUtil.random(100);
-		public Point target = new Point();
-		
-		public void draw(){
-			g.fill(color,30);
-			g.rect(0, 0, 100, 100);
-			g.noFill();
-		}
-	}
-	
+	/**
+	 * The Class that will hold all boxes.
+	 * @author mweskamp
+	 */
 	private class Chain extends Sprite{
+		
 		Box a, b, c, d, e;
 		
 		public Chain() {
@@ -52,7 +47,9 @@ public class TestDisplayList extends Application{
 			c.addChild(d);
 			c.addChild(e);
 		}
-		
+		/**
+		 * calc will get called before a draw by the rendering process coming up the display list.
+		 */
 		public void calc(){
 			//a.position.ease(mousePosition,0.2f);
 			a.rotation.z+=0.5;
@@ -62,4 +59,22 @@ public class TestDisplayList extends Application{
 			e.rotation.z-=1.5;
 		}
 	}
+	/**
+	 * The Box
+	 * @author mweskamp
+	 */
+	private class Box extends Sprite{
+		
+		public int color = MathUtil.random(100);
+		public Point target = new Point();
+		/**
+		 * draw will get called by the rendering process coming up the display list
+		 */
+		public void draw(){
+			g.fill(color,30);
+			g.rect(0, 0, 100, 100);
+			g.noFill();
+		}
+	}
+	
 }
