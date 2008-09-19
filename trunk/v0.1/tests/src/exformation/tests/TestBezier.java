@@ -13,15 +13,13 @@ import exformation.utils.MathUtil;
 
 public class TestBezier extends Application {
 
-	private static final long serialVersionUID = 1L;
-
-	private int NUM_POLYS			= 10;
+	private int NUM_POLYS           = 10;
 	private int NUM_POINTS_PER_POLY = 20;
 	private int NUM_PULSES_PER_POLY	= 10;
 	
-	private Polygon [] polys 	= new Polygon[NUM_POLYS];
-	private Pulse [] pulses		= new Pulse[NUM_POLYS*NUM_PULSES_PER_POLY];
-	private boolean useBeziers  = true;
+	private Polygon [] polys        = new Polygon[NUM_POLYS];
+	private Pulse [] pulses         = new Pulse[NUM_POLYS*NUM_PULSES_PER_POLY];
+	private boolean useBeziers      = true;
 	
 	//private PGraphics pg;
 	

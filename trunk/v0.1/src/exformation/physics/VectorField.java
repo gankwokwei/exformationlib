@@ -1,9 +1,10 @@
 package exformation.physics;
 
 import processing.core.PGraphics;
+import exformation.display.DisplayObject;
 import exformation.geom.Point;
 
-public class VectorField {
+public class VectorField extends DisplayObject {
 
 	  int res, _width, _height, coln, rown, totaln, counterx;
 	  Cell[] cell_arr;
@@ -30,13 +31,15 @@ public class VectorField {
 	    }
 	  }
 	  
-	  public void render (PGraphics g,boolean mousePressed,int mouseX,int mouseY) {
-		   int n;
-		   for (n=0; n<totaln; n++) {
+	  public void setMouse(boolean mousePressed, int mouseX,int mouseY){
+		  for (int n=0; n<totaln; n++) {
 		     cell_arr[n].calc(mousePressed,mouseX,mouseY);
 		    // cell_arr[n].render();
-		   }
-		   n=0;
+		   } 
+	  }
+	  
+	  public void calc() {
+		   int n=0;
 		   for (int x =0; x<coln; x++) {
 		      for(int y=0; y<rown; y++) {
 		        if (x>0 & x<coln-1 && y>0 && y<rown-1) {
@@ -51,9 +54,12 @@ public class VectorField {
 		               cell_arr2d[x][y+1].springColor(current);//col += (current - cell_arr2d[x][y+1].col)*sp;
 		        }
 		        n++;
-		    }
+		      }
 		   }
-		   for (n=0; n<totaln; n++) {
+	  }
+	  
+	  public void draw(){
+		   for (int n=0; n<totaln; n++) {
 		     //cell_arr[n].calc();
 		     cell_arr[n].render(g);
 		   }

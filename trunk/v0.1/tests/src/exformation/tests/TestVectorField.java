@@ -5,8 +5,6 @@ import exformation.physics.VectorField;
 
 public class TestVectorField extends Application {
 
-	private static final long serialVersionUID = 1L;
-
 	private VectorField map;
 
 	public int width  = 800;
@@ -14,11 +12,12 @@ public class TestVectorField extends Application {
 
 	public void main(){
 		map = new VectorField(width,height,8);
+		addChild(map);
+		registerPre(this);
 	}
 	
-	public void draw(){
-		g.background(255);
-		map.render(g,mousePressed,mouseX,mouseY);
+	public void pre(){
+		map.setMouse(mousePressed,mouseX,mouseY);
 	}
 }
 
