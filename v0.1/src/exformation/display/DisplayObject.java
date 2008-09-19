@@ -20,12 +20,13 @@ public class DisplayObject extends BaseClass{
 	protected boolean dirty;
 	public PGraphics g;
 	public DisplayObject parent;
+	public boolean isMouseDown;
 	
 	public DisplayObject(){
 		g = Application.PGRAPHICS;
-		dimension = new Dimension();
-		position = new Point();
-		rotation = new Point();
+		dimension 		= new Dimension();
+		position 		= new Point();
+		rotation 		= new Point();
 	}
 	
 	public void setPosition(int x,int y){

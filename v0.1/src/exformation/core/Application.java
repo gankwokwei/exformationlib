@@ -20,6 +20,7 @@ public class Application extends PApplet implements ComponentListener{
  
 	public static PGraphics PGRAPHICS;
 	public static PFont DEFAULT_FONT;
+	public static Point mousePosition = new Point();
 	
 	public int backgroundColor = color(255,255,255);
 	
@@ -27,7 +28,7 @@ public class Application extends PApplet implements ComponentListener{
     public static Rectangle Stage;
     public KeyboardShortcuts shortcuts;
     public Sprite root;
-    public Point mousePosition = new Point();
+
     public boolean isInit;
     public boolean clearBackgrondOnRender=true;
     
@@ -49,7 +50,7 @@ public class Application extends PApplet implements ComponentListener{
 	}
 	
 	public void pre(){
-		mousePosition.setValue(mouseX, mouseY);
+		Application.mousePosition.setValue(mouseX, mouseY);
 		calc();
 	}
 	
